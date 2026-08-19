@@ -1,0 +1,67 @@
+{{/*
+  Comments via giscus, backed by GitHub Discussions.
+
+  No server, no database, no cost: the thread lives in your repo's Discussions
+  and readers sign in with the GitHub account they already have. Enable
+  Discussions on the repo, install the giscus app, then fill in the IDs from
+  https://giscus.app under [params.giscus] in hugo.toml.
+
+  Per-post override: set `comments: false` in front matter to silence a page.
+*/}}
+{{- $g := .Site.Params.giscus }}
+{{- if and $g $g.repo $g.repoId }}
+<section class="comments" data-pagefind-ignore>
+  <script src="https://giscus.app/client.js"
+          data-repo="{{ $g.repo }}"
+          data-repo-id="{{ $g.repoId }}"
+          data-category="{{ $g.category | default "Announcements" }}"
+          data-category-id="{{ $g.categoryId }}"
+          data-mapping="{{ $g.mapping | default "pathname" }}"
+          data-strict="{{ $g.strict | default "1" }}"
+          data-reactions-enabled="{{ $g.reactions | default "1" }}"
+          data-emit-metadata="0"
+          data-input-position="{{ $g.inputPosition | default "top" }}"
+          data-theme="{{ $g.lightTheme | default "light" }}"
+          data-lang="{{ $g.lang | default "en" }}"
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>Comments need JavaScript. You can also reply in the repository's
+    GitHub Discussions.</noscript>
+</section>
+
+<script>
+  // Keep giscus in step with PaperMod's light/dark toggle. PaperMod flips a
+  // `dark` class on <body>, so watch that rather than the OS preference.
+  (function () {
+    var light = {{ $g.lightTheme | default "light" }};
+    var dark  = {{ $g.darkTheme  | default "dark"  }};
+
+    function current() {
+      return document.body.classList.contains("dark") ? dark : light;
+    }
+
+    function send(theme) {
+      var frame = document.querySelector("iframe.giscus-frame");
+      if (!frame) return;
+      frame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: theme } } },
+        "https://giscus.app"
+      );
+    }
+
+    // The iframe mounts asynchronously; sync once it has appeared.
+    var ready = setInterval(function () {
+      if (document.querySelector("iframe.giscus-frame")) {
+        clearInterval(ready);
+        send(current());
+      }
+    }, 200);
+    setTimeout(function () { clearInterval(ready); }, 10000);
+
+    new MutationObserver(function () { send(current()); })
+      .observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  })();
+</script>
+{{- end }}

@@ -1,0 +1,37 @@
+{{- /* Pagefind indexes anything inside data-pagefind-body. Set on single pages only. */ -}}
+<link rel="alternate" type="application/rss+xml" href="{{ "index.xml" | absURL }}" title="{{ .Site.Title }}">
+{{- with .Params.canonical }}<link rel="canonical" href="{{ . }}">{{- end }}
+<style>
+  .series-nav{border:1px solid var(--border);border-radius:8px;padding:.9rem 1.1rem;margin:1.5rem 0;background:var(--code-bg)}
+  .series-nav__head{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;margin-bottom:.5rem}
+  .series-nav__label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;opacity:.6}
+  .series-nav__title{font-weight:600}
+  .series-nav__count{font-size:.8rem;opacity:.6;margin-left:auto}
+  .series-nav__list{margin:0;padding-left:1.4rem}
+  .series-nav__list li{margin:.2rem 0}
+  .series-nav__list li.is-current>span{font-weight:600}
+.chip{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:.05rem .55rem;font-size:.75rem;margin-right:.3rem;text-decoration:none}
+  .chip--series{font-weight:600}
+  .chip--out::after{content:" \2197";opacity:.6}
+  .elsewhere{margin-top:.4rem}
+  .elsewhere__label{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;opacity:.6;margin-right:.4rem}
+  .video-embed{margin:1.6rem 0}
+  .video-embed iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:8px;display:block}
+  .video-embed figcaption{font-size:.8rem;opacity:.65;margin-top:.4rem}
+  .series-parts{padding-left:1.2rem}
+  .series-parts li{margin:.8rem 0}
+  .series-parts p{margin:.2rem 0;opacity:.8}
+  .forecast-card{border:1px solid var(--border);border-left-width:4px;border-radius:8px;padding:.9rem 1.1rem;margin:1.5rem 0;background:var(--code-bg)}
+  .forecast-card dl{display:flex;flex-wrap:wrap;gap:1.4rem;margin:0}
+  .forecast-card dt{font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;opacity:.6;margin:0}
+  .forecast-card dd{margin:.1rem 0 0;font-weight:600}
+  .forecast-card--open{border-left-color:var(--border)}
+  .forecast-card--correct{border-left-color:#2f855a}
+  .forecast-card--wrong{border-left-color:#c53030}
+  .forecast-card--partial{border-left-color:#b7791f}
+  .forecast-table{width:100%;border-collapse:collapse;margin:1rem 0 2rem;font-size:.92rem}
+  .forecast-table th{text-align:left;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;opacity:.6;border-bottom:1px solid var(--border);padding:.4rem .5rem}
+  .forecast-table td{padding:.5rem;border-bottom:1px solid var(--border);vertical-align:top}
+  .status{font-size:.75rem;border-radius:999px;padding:.05rem .5rem;border:1px solid var(--border)}
+  .status--correct{color:#2f855a}.status--wrong{color:#c53030}.status--partial{color:#b7791f}
+</style>

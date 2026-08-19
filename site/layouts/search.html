@@ -1,0 +1,48 @@
+{{- define "main" }}
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+  {{- with .Summary }}<p class="post-description">{{ . }}</p>{{- end }}
+</header>
+
+<div id="pagefind-search" class="pagefind-mount"></div>
+
+<noscript>
+  <p>Search needs JavaScript. Browse by
+     <a href="/categories/">category</a>,
+     <a href="/series/">series</a> or
+     <a href="/subjects/">subject</a> instead.</p>
+</noscript>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    new PagefindUI({
+      element: "#pagefind-search",
+      showSubResults: true,
+      showImages: false,
+      excerptLength: 30,
+      resetStyles: false,
+      translations: {
+        placeholder: {{ .Params.placeholder | default "Search…" }},
+        zero_results: "Nothing matched [SEARCH_TERM]. Try a symbol name, a file name, or a looser phrase."
+      }
+    });
+  });
+</script>
+
+<style>
+  /* Let Pagefind inherit the theme instead of shipping its own palette. */
+  .pagefind-mount {
+    --pagefind-ui-primary: var(--primary);
+    --pagefind-ui-text: var(--content);
+    --pagefind-ui-background: var(--theme);
+    --pagefind-ui-border: var(--border);
+    --pagefind-ui-tag: var(--code-bg);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 6px;
+    --pagefind-ui-font: inherit;
+    margin-top: 1.5rem;
+  }
+</style>
+{{- end }}

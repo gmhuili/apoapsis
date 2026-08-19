@@ -1,0 +1,10 @@
+{{- $id := .Get 0 | default (index (.Page.Params.links | default dict) "youtube") -}}
+{{- $id = replaceRE `^https?://(youtu\.be/|www\.youtube\.com/watch\?v=)` "" ($id | default "") -}}
+{{- if $id }}
+<figure class="video-embed" data-pagefind-ignore>
+  <iframe src="https://www.youtube-nocookie.com/embed/{{ $id }}"
+          title="{{ .Page.Title }}" loading="lazy" allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <figcaption>Narrated walkthrough of this review.</figcaption>
+</figure>
+{{- end }}

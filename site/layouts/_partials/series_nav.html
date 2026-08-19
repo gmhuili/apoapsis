@@ -1,0 +1,32 @@
+{{/*
+  Renders an ordered table of contents for whichever series this post belongs to.
+  Ordering comes from the post's `series_order` front-matter field, falling back
+  to publication date when a post does not set one.
+*/}}
+{{- with .Params.series }}
+  {{- range . }}
+    {{- $name := . }}
+    {{- $term := $.Site.GetPage (printf "/series/%s" (urlize $name)) }}
+    {{- with $term }}
+      {{- $parts := .Pages.ByParam "series_order" }}
+      <aside class="series-nav" aria-label="Posts in this series">
+        <div class="series-nav__head">
+          <span class="series-nav__label">Series</span>
+          <a class="series-nav__title" href="{{ .Permalink }}">{{ $name }}</a>
+          <span class="series-nav__count">{{ len $parts }} parts</span>
+        </div>
+        <ol class="series-nav__list">
+          {{- range $parts }}
+            <li{{ if eq .Permalink $.Permalink }} class="is-current" aria-current="true"{{ end }}>
+              {{- if eq .Permalink $.Permalink }}
+                <span>{{ .Title }}</span>
+              {{- else }}
+                <a href="{{ .Permalink }}">{{ .Title }}</a>
+              {{- end }}
+            </li>
+          {{- end }}
+        </ol>
+      </aside>
+    {{- end }}
+  {{- end }}
+{{- end }}

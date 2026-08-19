@@ -1,0 +1,121 @@
+baseURL = "https://gmhuili.github.io/apoapsis/"
+languageCode = "en-us"
+title = "Systems Notebook"
+theme = "PaperMod"
+
+# Needed so Pagefind and the syndicator can find canonical URLs.
+canonifyURLs = false
+enableRobotsTXT = true
+enableGitInfo = true
+buildDrafts = false
+buildFuture = false
+pygmentsUseClasses = true
+
+[pagination]
+  pagerSize = 12
+
+# --- Taxonomies -------------------------------------------------------------
+# `subject` is the fine-grained topic (e.g. "lock-free-queues", "ekf-slam").
+# `series` is an ordered multi-part arc (e.g. "Reading ORB-SLAM3").
+# `category` is the coarse bucket, one per post kind: code-review, essay,
+# forecast, teardown, explainer, retrospective, note. Run `apo kinds`.
+[taxonomies]
+  category = "categories"
+  series   = "series"
+  subject  = "subjects"
+  tag      = "tags"
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+    codeFences = true
+    guessSyntax = true
+    lineNos = true
+    lineNumbersInTable = true
+    style = "github-dark"
+  [markup.goldmark.renderer]
+    unsafe = true          # allows raw HTML (diagrams, <details>, embeds)
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[params]
+  description = "Code reviews, teardowns, essays and dated forecasts about how systems are built."
+  author = "Your Name"
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowCodeCopyButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowToc = true
+  TocOpen = false
+  ShowWordCount = true
+  hidemeta = false
+  # Comments run on GitHub Discussions via giscus. Free, no server, no
+  # database: readers sign in with the GitHub account they already have.
+  # Enable Discussions on the repo, install https://github.com/apps/giscus,
+  # then paste the IDs from https://giscus.app below.
+  comments = true
+
+  [params.giscus]
+    repo         = "emily/emily.github.io"
+    repoId       = "R_kgDOABCDEF"
+    category     = "Comments"
+    categoryId   = "DIC_kwDOABCDEF"
+    mapping      = "pathname"
+    strict       = "1"
+    reactions    = "1"
+    inputPosition = "top"
+    lightTheme   = "light"
+    darkTheme    = "dark"
+    lang         = "en"
+
+  [params.homeInfoParams]
+    Title = "Systems Notebook"
+    Content = "Close readings of real code, teardowns of systems and protocols, essays on engineering practice, and forecasts I commit to in writing so they can be scored later."
+
+  # Pagefind static search — no server, no API key, no cost.
+  [params.fuseOpts]
+    isCaseSensitive = false
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/YOURNAME"
+  [[params.socialIcons]]
+    name = "rss"
+    url = "index.xml"
+
+[menu]
+  [[menu.main]]
+    identifier = "search"
+    name = "Search"
+    url = "/search/"
+    weight = 10
+  [[menu.main]]
+    identifier = "series"
+    name = "Series"
+    url = "/series/"
+    weight = 20
+  [[menu.main]]
+    identifier = "categories"
+    name = "Categories"
+    url = "/categories/"
+    weight = 30
+  [[menu.main]]
+    identifier = "subjects"
+    name = "Subjects"
+    url = "/subjects/"
+    weight = 40
+  [[menu.main]]
+    identifier = "forecasts"
+    name = "Forecasts"
+    url = "/forecasts/"
+    weight = 45
+  [[menu.main]]
+    identifier = "archive"
+    name = "Archive"
+    url = "/archives/"
+    weight = 50

@@ -1,0 +1,13 @@
+{{- $p := .Page -}}
+{{- with $p.Params.horizon -}}
+{{- $resolved := $p.Params.resolved | default "" -}}
+<aside class="forecast-card forecast-card--{{ if $resolved }}{{ $resolved }}{{ else }}open{{ end }}"
+       aria-label="Forecast terms">
+  <dl>
+    <div><dt>Resolves by</dt><dd>{{ . }}</dd></div>
+    {{- with $p.Params.confidence }}<div><dt>Confidence</dt><dd>{{ . }}</dd></div>{{- end }}
+    {{- with $p.Params.review_on }}<div><dt>Review on</dt><dd>{{ . }}</dd></div>{{- end }}
+    <div><dt>Status</dt><dd>{{ if $resolved }}{{ $resolved }}{{ else }}open{{ end }}</dd></div>
+  </dl>
+</aside>
+{{- end -}}

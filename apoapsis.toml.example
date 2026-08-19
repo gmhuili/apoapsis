@@ -1,0 +1,89 @@
+# Copy to apoapsis.toml. Safe to commit: it holds no secrets, only the NAMES
+# of environment variables where secrets live.
+
+[site]
+base_url    = "https://YOURNAME.github.io"
+root        = "site"
+content_dir = "content/posts"
+author      = "Your Name"
+
+[git]
+remote = "origin"
+branch = "main"
+
+state_file = ".apoapsis-state.json"
+
+# --- dev.to ---------------------------------------------------------------
+# Free. Generate a key at dev.to/settings/extensions.
+#   export DEVTO_API_KEY=...
+[targets.devto]
+enabled     = true
+api_key_env = "DEVTO_API_KEY"
+draft_first = true      # land as a draft so you can eyeball it before it ships
+
+# --- Hashnode -------------------------------------------------------------
+# Off by default: Hashnode's GraphQL API now requires a paid Pro plan.
+[targets.hashnode]
+enabled        = false
+token_env      = "HASHNODE_TOKEN"
+publication_id = ""
+
+# --- Medium ---------------------------------------------------------------
+# No new API tokens are being issued, so this prints an import link instead.
+# Set legacy_api = true only if you hold a token issued before 2025.
+[targets.medium]
+enabled        = true
+legacy_api     = false
+token_env      = "MEDIUM_TOKEN"
+publish_status = "draft"
+
+# --- YouTube --------------------------------------------------------------
+#   pip install 'apoapsis[youtube]'
+# Enable YouTube Data API v3 in Google Cloud, create a Desktop OAuth client,
+# save the JSON as client_secrets.json.
+[targets.youtube]
+enabled        = false
+client_secrets = "client_secrets.json"
+token_file     = ".youtube-token.json"
+render_dir     = "build/video"
+privacy        = "private"    # flip to "public" once you trust the pipeline
+category_id    = 28           # Science & Technology
+title_template = "{title}"
+
+# Point this at your own repo-to-video pipeline. It is called as:
+#   <renderer> --script <file> --out <file.mp4> [--repo <url>]
+# renderer = "repocast"
+#
+# Or take full control of the argument order:
+# render_command = "repocast render --narration {script} --repo {repo} --output {output}"
+
+# --- repocast ------------------------------------------------------------
+# How `apo import` finds artifacts in a repocast output directory. Every
+# entry is a list of globs, tried in order; the first match wins. Only set
+# these if repocast's output layout differs from the defaults.
+[repocast]
+# article   = ["article*.md", "*.article.md", "*.md"]
+# video     = ["*.mp4", "video/*.mp4"]
+# short     = ["*short*.mp4", "short/*.mp4"]
+# thumbnail = ["thumbnail*.png", "cover*.png", "*.jpg"]
+# metadata  = ["publish*.json", "metadata*.json", "*.json"]
+
+# --- post kinds ----------------------------------------------------------
+# The site is not only code review. A kind bundles a category, a skeleton
+# outline, and any extra front matter that content type needs. `apo kinds`
+# lists them. Built in: code-review, essay, forecast, teardown, explainer,
+# retrospective, note.
+#
+# Override a built-in, or declare a new one — a kind that is not listed
+# below is simply created:
+#
+# [kinds.benchmark]
+# category    = "benchmark"
+# description = "Measured comparison with a reproducible method."
+# outline     = ["What I measured", "Method", "Results", "Threats to validity"]
+# requires    = ["hardware", "method_url"]
+# extra       = { hardware = "", method_url = "" }
+# video       = true
+#
+# `requires` names front-matter fields `apo check` and `apo deploy` refuse to
+# publish without. `extra` seeds them empty in new posts.

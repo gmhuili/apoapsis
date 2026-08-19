@@ -1,0 +1,12 @@
+{{- define "main" }}
+<header class="page-header"><h1>{{ .Title }}</h1></header>
+<ol class="series-parts">
+  {{- range .Pages.ByParam "series_order" }}
+    <li>
+      <a href="{{ .Permalink }}"><strong>{{ .Title }}</strong></a>
+      {{- with .Params.summary }}<p>{{ . }}</p>{{- end }}
+      <small>{{ .Date.Format "2 Jan 2006" }}</small>
+    </li>
+  {{- end }}
+</ol>
+{{- end }}

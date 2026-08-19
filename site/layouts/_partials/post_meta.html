@@ -1,0 +1,45 @@
+{{/*
+  Two jobs, both automatic:
+  1. data-pagefind-filter attributes turn the search page into a faceted index
+     over category / series / subject / year.
+  2. The `links` map (written back by `apo syndicate`) surfaces every external
+     copy of this essay, so the post is the hub and the platforms are spokes.
+*/}}
+<div class="post-meta">
+  {{- with .Date }}
+    <time datetime="{{ .Format "2006-01-02" }}" data-pagefind-filter="year">{{ .Format "2 January 2006" }}</time>
+  {{- end }}
+  {{- with .Params.categories }} ·
+    {{- range . }}
+      <a href="/categories/{{ . | urlize }}/" data-pagefind-filter="category">{{ . }}</a>
+    {{- end }}
+  {{- end }}
+  {{- with .ReadingTime }} · {{ . }} min read{{- end }}
+</div>
+
+{{- with .Params.series }}
+<div class="post-meta">
+  {{- range . }}<a class="chip chip--series" href="/series/{{ . | urlize }}/" data-pagefind-filter="series">{{ . }}</a>{{- end }}
+</div>
+{{- end }}
+
+{{- with .Params.subjects }}
+<div class="post-meta">
+  {{- range . }}<a class="chip" href="/subjects/{{ . | urlize }}/" data-pagefind-filter="subject">{{ . }}</a>{{- end }}
+</div>
+{{- end }}
+
+{{- with .Params.links }}
+<div class="post-meta elsewhere" data-pagefind-ignore>
+  <span class="elsewhere__label">Also on</span>
+  {{- range $platform, $url := . }}
+    {{- if $url }}<a class="chip chip--out" href="{{ $url }}" rel="noopener">{{ $platform }}</a>{{- end }}
+  {{- end }}
+</div>
+{{- end }}
+
+{{- with .Params.repo }}
+<div class="post-meta" data-pagefind-ignore>
+  <a class="chip chip--repo" href="{{ . }}" rel="noopener">source repository</a>
+</div>
+{{- end }}

@@ -1,0 +1,10 @@
+site/public/
+site/resources/
+site/.hugo_build.lock
+build/
+.apoapsis-state.json.corrupt
+.youtube-token.json
+client_secrets.json
+apoapsis.toml
+__pycache__/
+*.egg-info/

@@ -1,0 +1,27 @@
+[project]
+name = "apoapsis"
+version = "1.0.0"
+description = "The point of maximum vantage: author, index and syndicate technical writing."
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1",
+    "requests>=2.31",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+youtube = [
+    "google-api-python-client>=2.120",
+    "google-auth-oauthlib>=1.2",
+]
+
+[project.scripts]
+apoapsis = "apoapsis.cli:main"
+apo = "apoapsis.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

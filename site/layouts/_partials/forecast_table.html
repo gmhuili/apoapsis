@@ -1,0 +1,13 @@
+<table class="forecast-table">
+  <thead><tr><th>Prediction</th><th>Confidence</th><th>Resolves</th><th>Status</th></tr></thead>
+  <tbody>
+  {{- range . }}
+    <tr>
+      <td><a href="{{ .Permalink }}">{{ .Title }}</a></td>
+      <td>{{ .Params.confidence | default "—" }}</td>
+      <td>{{ .Params.horizon | default "—" }}</td>
+      <td><span class="status status--{{ .Params.resolved | default "open" }}">{{ .Params.resolved | default "open" }}</span></td>
+    </tr>
+  {{- end }}
+  </tbody>
+</table>

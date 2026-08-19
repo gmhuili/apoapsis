@@ -1,0 +1,43 @@
+{{- define "main" }}
+<header class="page-header">
+  <h1>{{ .Title }}</h1>
+  {{- with .Summary }}<p class="post-description">{{ . }}</p>{{- end }}
+</header>
+
+{{- $all := where .Site.RegularPages "Params.post_kind" "forecast" }}
+{{- $due := slice }}
+{{- $open := slice }}
+{{- $scored := slice }}
+{{- $today := now.Format "2006-01-02" }}
+
+{{- range $all }}
+  {{- $resolved := .Params.resolved | default "" }}
+  {{- if $resolved }}
+    {{- $scored = $scored | append . }}
+  {{- else if and .Params.review_on (le (printf "%v" .Params.review_on) $today) }}
+    {{- $due = $due | append . }}
+  {{- else }}
+    {{- $open = $open | append . }}
+  {{- end }}
+{{- end }}
+
+{{- if $due }}
+<h2>Due for review</h2>
+<p class="post-description">These have passed their review date and have not been scored yet.</p>
+{{- partial "forecast_table.html" $due }}
+{{- end }}
+
+{{- with $open }}
+<h2>Open</h2>
+{{- partial "forecast_table.html" . }}
+{{- end }}
+
+{{- with $scored }}
+<h2>Scored</h2>
+{{- partial "forecast_table.html" . }}
+{{- end }}
+
+{{- if not $all }}
+<p>No forecasts yet. Create one with <code>apo new "…" -k forecast</code>.</p>
+{{- end }}
+{{- end }}
