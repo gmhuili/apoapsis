@@ -34,8 +34,21 @@ jobs:
           submodules: recursive   # pulls the theme
           fetch-depth: 0          # enableGitInfo needs full history
 
+      - name: Fail early if the theme submodule is empty
+        run: |
+          if [ ! -f site/themes/PaperMod/layouts/baseof.html ]; then
+            echo "::error::PaperMod is missing — the submodule did not check out."
+            echo "Locally run: git submodule update --init --recursive"
+            exit 1
+          fi
+
       - uses: actions/configure-pages@v5
         id: pages
+        with:
+          # Turn Pages on if it has never been enabled. Without this, the very
+          # first run dies here with a bare 404:
+          #   "Get Pages site failed ... Error: Not Found"
+          enablement: true
 
       - name: Build site
         working-directory: ./site
@@ -52,6 +65,12 @@ jobs:
             --site public \
             --root-selector "article.post-single, main.main" \
             --output-subdir pagefind
+
+      - name: Report what was built
+        working-directory: ./site
+        run: |
+          echo "HTML pages: $(find public -name '*.html' | wc -l)"
+          echo "Total size: $(du -sh public | cut -f1)"
 
       - uses: actions/upload-pages-artifact@v3
         with:
