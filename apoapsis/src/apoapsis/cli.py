@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -30,8 +31,43 @@ def _load():
         raise click.ClickException(str(exc)) from exc
 
 
+# External binaries apoapsis shells out to, with a hint for each so a missing
+# tool produces an instruction rather than a traceback.
+TOOL_HINTS = {
+    "hugo": (
+        "Install Hugo extended 0.146 or newer. The version in Ubuntu's apt is "
+        "too old for PaperMod and will fail to build.\n"
+        "  wget https://github.com/gohugoio/hugo/releases/download/"
+        "v0.152.0/hugo_extended_0.152.0_linux-amd64.deb\n"
+        "  sudo dpkg -i hugo_extended_0.152.0_linux-amd64.deb\n"
+        "  hugo version   # must report +extended"
+    ),
+    "npx": (
+        "Install Node.js — npx ships with it and is needed to build the "
+        "Pagefind search index.\n"
+        "  sudo apt install nodejs npm"
+    ),
+    "git": "Install git:  sudo apt install git",
+}
+
+
+def _require(tool: str) -> None:
+    """Fail with an actionable message when a required binary is absent."""
+    if shutil.which(tool) is not None:
+        return
+    hint = TOOL_HINTS.get(tool, "")
+    message = f"`{tool}` is not on your PATH."
+    if hint:
+        message += f"\n\n{hint}"
+    raise click.ClickException(message)
+
+
 def _run(command: list[str], cwd: Path | None = None) -> None:
-    result = subprocess.run(command, cwd=cwd, check=False)
+    _require(command[0])
+    try:
+        result = subprocess.run(command, cwd=cwd, check=False)
+    except FileNotFoundError as exc:  # PATH changed mid-run, or exec bit missing
+        raise click.ClickException(f"Could not execute `{command[0]}`: {exc}") from exc
     if result.returncode != 0:
         raise click.ClickException(
             f"`{' '.join(command)}` failed with status {result.returncode}"
